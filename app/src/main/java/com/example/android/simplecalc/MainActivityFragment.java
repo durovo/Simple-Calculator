@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,7 +53,7 @@ public class MainActivityFragment extends Fragment {
                 R.id.text_ops,
                 opti
         );
-        ListView optionsView = (ListView) rootView.findViewById(R.id.list_options);
+        GridView optionsView = (GridView) rootView.findViewById(R.id.options_gridview);
         optionsView.setAdapter(optionsAdapter);
 
         optionsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
