@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class MainActivityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         String[] ops = {
                 "0",
                 "1",
@@ -53,14 +54,17 @@ public class MainActivityFragment extends Fragment {
         );
         ListView optionsView = (ListView) rootView.findViewById(R.id.list_options);
         optionsView.setAdapter(optionsAdapter);
+
         optionsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                TextView display = (TextView) rootView.findViewById(R.id.display_textview);
                 String input = optionsAdapter.getItem(position);
-                Toast.makeText(getActivity(), input, Toast.LENGTH_SHORT).show();
                 char c = input.charAt(0);
+
                 if (c <= '9' && c >= '0' && operator.equals("#")) {
                     string1 = string1 + input;
+                    display.setText(string1.substring(1));
                 } else if (c == '=') {
                     int a1 = Integer.parseInt(string1);
                     int a2 = Integer.parseInt(string2);
@@ -68,15 +72,15 @@ public class MainActivityFragment extends Fragment {
                     //Toast.makeText(getActivity(), string1 + ' ' + string2, Toast.LENGTH_SHORT).show();
                     if (operator.equals("/")) {
                         if (a2 == 0) {
-                            Toast.makeText(getActivity(), "Divide by Zero!", Toast.LENGTH_SHORT).show();
+                            display.setText("Divide by Zero!");
                         } else {
                             res = (float)a1 / a2;
-                            Toast.makeText(getActivity(), Float.toString(res), Toast.LENGTH_SHORT).show();
+                            display.setText(Float.toString(res));
                         }
                     } else {
                         if (operator.equals("+")) {
                             res = a1 + a2;
-                            Toast.makeText(getActivity(), Float.toString(res), Toast.LENGTH_SHORT).show();
+                            display.setText(Float.toString(res));
                         } else if (operator.equals("-")) {
                             res = a1 - a2;
                         }
@@ -84,7 +88,7 @@ public class MainActivityFragment extends Fragment {
 
                             res = a1*a2;
                         }
-                        Toast.makeText(getActivity(), Float.toString(res), Toast.LENGTH_SHORT).show();
+                        display.setText(Float.toString(res));
                     }
                     string1 = "0";
                     string2 = "0";
@@ -92,8 +96,10 @@ public class MainActivityFragment extends Fragment {
 
                 } else if (operator.equals("#")) {
                     operator = input;
+                    display.setText(string1.substring(1)+operator);
                 } else {
                     string2 = string2 + input;
+                    display.setText(string1.substring(1)+operator+string2.substring(1));
                 }
             }
         });
